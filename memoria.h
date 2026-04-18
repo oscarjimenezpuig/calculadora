@@ -19,6 +19,8 @@
 #define FCRR 4 /* bandera de acarreo a la derecha */
 #define FCRL 8 /* bandera de acarreo a la izquierda */
 #define FSTP 16 /* bandera de stop de ejecucion de programa */
+#define FJAD 32 /* bandera que avisa de que el salto de memoria ya se ha realizado */
+#define FOUT 64 /* avisa si dentro del out hay algo */
 
 typedef unsigned char u1;
 
@@ -70,11 +72,28 @@ void dec();
 void jmp(u1 v);
 /* salto a la direccion de memoria especificada (modifica LP) */
 
-void ijm(u1 f,u1 v);
+void ifj(u1 f,u1 v);
 /* salto a una posicion de memoria si la bandera esta conectada */
+
+void ifn(u1 f,u1 v);
+/* salto a la posicion de memoria si la bandera no esta conectada */
 
 void stp();
 /* se conecta la bandera stop, corresponde a la instruccion 0 */
+
+/* input/output */
+
+void out(u1 chr);
+/* se copia el registro en la posicion mas baja del video, si es como caracter directamente el valor, si no en tres numeros */
+
+void clr();
+/* se ponen a 0 todas las posiciones del video */
+
+void fls();
+/* se representa en la pantalla los valores (0 no representa nada) */
+
+void inp(u1 chr);
+/* se coge un valor y se introduce en el registro, si es como caracter guarda solo un valor, si no guarda todo el numero  */
 
 /* inicio de la memoria */
 

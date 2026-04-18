@@ -136,15 +136,90 @@ void dec() {
 }
 
 void jmp(u1 v) {
-    if(v>=RAM && v<RAM+RAMD) memory[LP]=v;
+    if(v>=RAM && v<RAM+RAMD) {
+        memory[LP]=v;
+        fon(FJAD);
+    }
 }
 
-void ijm(u1 f,u1 v) {
+void ifj(u1 f,u1 v) {
     if(fget(f)) jmp(v);
+}
+
+void ifn(u1 f,u1 v) {
+    if(fget(f)==0) jmp(v);
 }
 
 void stp() {
     fon(FSTP);
+}
+
+static void outval(u1 val) {
+     u1* ptr=memory+VRAM+VRAMD-1;
+    while(ptr!=memory+VRAM) {
+        *(ptr)=*(ptr-1);
+        ptr--;
+    }
+    *(memory+VRAM)=val;
+}
+    
+#include <stdio.h> //dbg
+
+void out(u1 chr) {
+    if(chr) {
+        outval(vag);
+        fon(FOUT);
+    } else {
+        u1 val=vag;
+        printf("%i\n",val);//dbg
+        char num[3];
+        char* p=num;
+        u1 c=*p=(val/100)+'0';
+        u1 d=*(p+1)=(val-100*c)/10+'0';
+        *(p+2)=(val-100*c-10*d)+'0';
+        *(p+3)=fget(FNEG)?'-':'+';
+        char* pu=num;
+        while(pu!=num+4) outval(*pu++);
+        fon(FOUT);
+    }
+}
+
+void clr() {
+    u1* ptr=memory+VRAM;
+    while(ptr!=memory+VRAM+VRAMD) *ptr++=0;
+    fon(FOUT);
+}
+
+#include <stdio.h>
+
+void fls() {
+    if(fget(FOUT)) {
+        printf(">");
+        u1* ptr=memory+VRAM;
+        while(ptr!=memory+VRAM+VRAMD) {
+            if(*ptr!=0) printf("%c",*ptr);
+            ptr++;
+        }
+        printf("\n");
+        foff(FOUT);
+    }
+}
+
+void inp(u1 chr) {
+    fls();
+    u1 len=(chr)?1:3;
+    printf("<");
+    char str[4];
+    char* p=str;
+    char c=0;
+    while(((c=getchar())!='\n') && p!=str+len) {
+        if(chr || (c>='0' && c<='9')) *p++=c;
+    }
+    *p='\0';
+    u1 val=0;
+    if(chr) val=*str;
+    else sscanf(str,"%hhi",&val);
+    vas(val);
 }
 
 void memini() {
@@ -152,8 +227,6 @@ void memini() {
     while(ptr!=memory+MEMSIZ) *ptr++=0;
     memory[LP]=RAM;
 }
-
-#include <stdio.h>
 
 void memprt() {
     u1* ptr=memory;
@@ -165,11 +238,4 @@ void memprt() {
 }
 
 
-/* prueba */
 
-int main() {
-    lrv(RA,255);
-    lrv(RB,10);
-    inc();
-    memprt();
-}

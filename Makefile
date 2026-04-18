@@ -82,6 +82,6 @@ check:
 #MAKEFILE VARIABLE
 
 NAME =  calculadora
-SCRS = memoria.c
+SCRS = memoria.c programa.c
 INCLUDES = #-lX11
 
