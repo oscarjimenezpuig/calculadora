@@ -86,14 +86,14 @@
  * clr = 39
  * SALTOS Y SALTOS CONDICIONALES (con las banderas)
  * jmp = 8
- * ifzer = 9
- * ifneg = 25
- * ifcrr = 41
- * ifcrl = 57
- * ifnzer = 10 
- * ifnneg = 26
- * ifncrr = 42
- * ifncrl = 58
+ * ifzer = 25
+ * ifneg = 41
+ * ifcrr = 57
+ * ifcrl = 73
+ * ifnzer = 26 
+ * ifnneg = 42
+ * ifncrr = 58
+ * ifncrl = 74
 */
 
 

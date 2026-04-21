@@ -68,6 +68,7 @@ void dec();
 /* A decrementado */
 
 /* flujo del programa */
+/* todos los saltos de memoria relativos al inicio de la ram */
 
 void jmp(u1 v);
 /* salto a la direccion de memoria especificada (modifica LP) */

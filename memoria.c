@@ -128,16 +128,17 @@ void inc() {
 void dec() {
     freset;
     vas(vag-1);
-    if(vag==255) {
+    if(vag==0) {
+        fon(FZER);
+    } else if (vag==255) {
         fon(FNEG);
         vas(1);
     }
-    flgzero();
 }
 
 void jmp(u1 v) {
-    if(v>=RAM && v<RAM+RAMD) {
-        memory[LP]=v;
+    if(v<RAMD) {
+        memory[LP]=v+RAM;
         fon(FJAD);
     }
 }
@@ -163,8 +164,6 @@ static void outval(u1 val) {
     *(memory+VRAM)=val;
 }
     
-#include <stdio.h> //dbg
-
 void out(u1 chr) {
     if(chr) {
         outval(vag);
@@ -213,25 +212,39 @@ void fls() {
 }
 
 #define iscif(A) ((A)>='0' && (A)<='9')
+#define EOS '\0'
+
+static void ent(char* str) {
+    printf("<");
+    char* p=str;
+    char c=0;
+    while((c=getchar())!='\n' && (p-str)<4) {
+        *p++=c;
+    }
+    *p=EOS;
+}
 
 void inp(u1 chr) {
     fls();
-    printf("<");
-    char c=getchar();
+    char str[4];
+    ent(str);
     u1 val=0;
-    if(chr) val=c;
-    else if((c=='+' || c=='-' || iscif(c))) {
-        u1 fact=100;
-        if(c=='-') fon(FNEG);
-        else foff(FNEG);
-        if(iscif(c)) {
-            val=fact*(c-'0');
-            fact=fact/10;
+    u1 err=0;
+    if(chr) val=*str;
+    else {
+        char* p=str;
+        char* ini=str;
+        if(iscif(*p)) foff(FNEG);
+        else if(*p=='+') {
+            foff(FNEG);
+            ini=str+1;
+        } else if(*p=='-') {
+            fon(FNEG);
+            ini=str+1;
         }
-        while(fact) {
-            c=getchar();
-            val+=fact*(c-'0');
-            fact=fact/10;
+        else err=1;
+        if(!err) {
+            sscanf(ini,"%hhi",&val);
         }
     }
     vas(val);
