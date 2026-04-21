@@ -55,6 +55,49 @@
 
 #define TRP 5 /* tiempo de refresco de la pantalla */
 
+/* ordenes
+ * stp = 0 STOP
+ * loA = 1 load A con un valor
+ * loB = 17 load B con un valor
+ * loI = 33 load I con un valor
+ * loJ = 49 load J con un valor
+ * loA(I) = 2 load A con valor de direccion apuntada por I
+ * lo(I)A = 3 load la direccion apuntada por I con el valor de A
+ * movA = 4 mueve el registro B en el A
+ * movB = 20 mueve el registro A en el B
+ * movI = 36 mueve el registro J en el I
+ * movJ = 52 mueve el registro I en el J
+ * swpA = 5 intercambia A y B
+ * swpI = 37 intercambia I y J
+ * OPERACIONES (entre A y B)
+ * and = 6 
+ * or = 22
+ * xor = 38
+ * not = 54
+ * rgt = 70
+ * lft = 86
+ * inc = 102
+ * dec = 118
+ * SALIDA Y ENTRADA EN PANTALLA
+ * outval = 7
+ * outchr = 71
+ * inval = 23
+ * inchr = 87
+ * clr = 39
+ * SALTOS Y SALTOS CONDICIONALES (con las banderas)
+ * jmp = 8
+ * ifzer = 9
+ * ifneg = 25
+ * ifcrr = 41
+ * ifcrl = 57
+ * ifnzer = 10 
+ * ifnneg = 26
+ * ifncrr = 42
+ * ifncrl = 58
+*/
+
+
+
 void program(u1* prg);
 /* lectura del programa, el primer dato es la longitud en bits de este */
 

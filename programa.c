@@ -8,8 +8,8 @@
 static void lectura() {
     /* esta instruccion lee la instruccion marcada por LP */
     u1 val=lin;
-    u1 ins=val%32;
-    u1 cmp=val/32;
+    u1 ins=val%16;
+    u1 cmp=val/16;
     if(ins==STP) stp();
     else if(ins==LRV) {
         nxt;
@@ -50,6 +50,9 @@ static void lectura() {
     }
 }
 
+#undef nxt
+#undef lin
+
 #define isstp ((memory[RF] & FSTP)!=0)
 
 static void scrout() {
@@ -69,6 +72,8 @@ static void run() {
     }
     scrout();
 }
+
+#undef isstp
 
 static void read(u1 sop,u1* prg) {
     /* lee el programa y lo almacena en la ram*/
@@ -91,6 +96,6 @@ void program(u1* p) {
 /* prueba */
 
 int main() {
-    u1 pr[]={2,7+32*(1+4*0),7+32*(0+4*0)};
+    u1 pr[]={15,23,20,23,9,30,118,5,102,5,8,22,7,5,7,0};
     program(pr);
 }

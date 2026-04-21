@@ -171,15 +171,22 @@ void out(u1 chr) {
         fon(FOUT);
     } else {
         u1 val=vag;
-        printf("%i\n",val);//dbg
-        char num[3];
-        char* p=num;
-        u1 c=*p=(val/100)+'0';
-        u1 d=*(p+1)=(val-100*c)/10+'0';
-        *(p+2)=(val-100*c-10*d)+'0';
-        *(p+3)=fget(FNEG)?'-':'+';
-        char* pu=num;
-        while(pu!=num+4) outval(*pu++);
+        u1 cif[]={0,0,0};
+        u1* pc=cif;
+        u1 div=100;
+        while(val) {
+            *pc=val/div;
+            val=(val-(*pc)*div);
+            div=div/10;
+            pc++;
+        }
+        pc=cif+2;
+        while(pc>=cif) {
+            outval(*pc+'0');
+            pc--;
+        }
+        char s=fget(FNEG)?'-':'+';
+        outval(s);
         fon(FOUT);
     }
 }
@@ -205,20 +212,28 @@ void fls() {
     }
 }
 
+#define iscif(A) ((A)>='0' && (A)<='9')
+
 void inp(u1 chr) {
     fls();
-    u1 len=(chr)?1:3;
     printf("<");
-    char str[4];
-    char* p=str;
-    char c=0;
-    while(((c=getchar())!='\n') && p!=str+len) {
-        if(chr || (c>='0' && c<='9')) *p++=c;
-    }
-    *p='\0';
+    char c=getchar();
     u1 val=0;
-    if(chr) val=*str;
-    else sscanf(str,"%hhi",&val);
+    if(chr) val=c;
+    else if((c=='+' || c=='-' || iscif(c))) {
+        u1 fact=100;
+        if(c=='-') fon(FNEG);
+        else foff(FNEG);
+        if(iscif(c)) {
+            val=fact*(c-'0');
+            fact=fact/10;
+        }
+        while(fact) {
+            c=getchar();
+            val+=fact*(c-'0');
+            fact=fact/10;
+        }
+    }
     vas(val);
 }
 
